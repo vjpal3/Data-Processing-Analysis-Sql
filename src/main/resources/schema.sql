@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS consumer_complaints (
+    id SERIAL PRIMARY KEY,
+    complaint_id INTEGER,
+    date_received DATE,
+    product_name VARCHAR(100),
+    sub_product VARCHAR(100),
+    issue VARCHAR(255),
+    sub_issue VARCHAR(255),
+    consumer_complaint_narrative TEXT,
+    company_public_response TEXT,
+    company VARCHAR(100),
+    state_name CHAR(2),
+    zip_code VARCHAR(50),
+    tags VARCHAR(100),
+    consumer_consent_provided VARCHAR(255),
+    submitted_via VARCHAR(50),
+    date_sent DATE,
+    company_response_to_consumer VARCHAR(255),
+    timely_response VARCHAR(50),
+    consumer_disputed VARCHAR(50)
+);
