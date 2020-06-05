@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS consumer_complaints (
+CREATE TABLE IF NOT EXISTS consumer_complaint (
     id SERIAL PRIMARY KEY,
     complaint_id INTEGER,
     date_received DATE,
