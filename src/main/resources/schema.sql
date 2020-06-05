@@ -1,6 +1,5 @@
 CREATE TABLE IF NOT EXISTS consumer_complaint (
     id SERIAL PRIMARY KEY,
-    complaint_id INTEGER,
     date_received DATE,
     product_name VARCHAR(100),
     sub_product VARCHAR(100),
@@ -17,5 +16,6 @@ CREATE TABLE IF NOT EXISTS consumer_complaint (
     date_sent DATE,
     company_response_to_consumer VARCHAR(255),
     timely_response VARCHAR(50),
-    consumer_disputed VARCHAR(50)
+    consumer_disputed VARCHAR(50),
+    complaint_id INTEGER
 );
