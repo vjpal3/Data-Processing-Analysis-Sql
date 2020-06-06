@@ -53,8 +53,8 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 		        ps.setString(13, complaint.getSubmittedVia());
 		        ps.setObject(14, complaint.getDateSent());
 		        ps.setString(15, complaint.getCompanyResponseToConsumer());
-		        ps.setString(16, complaint.getTimelyResponse());
-		        ps.setString(17, complaint.getConsumerConsentProvided());
+		        ps.setBoolean(16, complaint.getTimelyResponse());
+		        ps.setBoolean(17, complaint.getConsumerDisputed());
 		        ps.setInt(18, complaint.getComplaintId());
 		      }
 		      

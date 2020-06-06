@@ -20,8 +20,8 @@ public class ConsumerComplaint {
     private String submittedVia ;
     private Instant dateSent;
     private String companyResponseToConsumer ;
-    private String timelyResponse;
-    private String consumerDisputed;
+    private boolean timelyResponse;
+    private boolean consumerDisputed;
     private int complaintId;
     
     public ConsumerComplaint() {
@@ -30,8 +30,8 @@ public class ConsumerComplaint {
 	public ConsumerComplaint(long id, Instant dateReceived, String productName, String subProduct,
 			String issue, String subIssue, String consumerComplaintNarrative, String companyPublicResponse,
 			String company, String stateName, String zipCode, String tags, String consumerConsentProvided,
-			String submittedVia, Instant dateSent, String companyResponseToConsumer, String timelyResponse,
-			String consumerDisputed, int complaintId) {
+			String submittedVia, Instant dateSent, String companyResponseToConsumer, boolean timelyResponse,
+			boolean consumerDisputed, int complaintId) {
 		super();
 		this.id = id;
 		this.complaintId = complaintId;
@@ -190,19 +190,19 @@ public class ConsumerComplaint {
 		this.companyResponseToConsumer = companyResponseToConsumer;
 	}
 
-	public String getTimelyResponse() {
+	public boolean getTimelyResponse() {
 		return timelyResponse;
 	}
 
-	public void setTimelyResponse(String timelyResponse) {
+	public void setTimelyResponse(boolean timelyResponse) {
 		this.timelyResponse = timelyResponse;
 	}
 
-	public String getConsumerDisputed() {
+	public boolean getConsumerDisputed() {
 		return consumerDisputed;
 	}
 
-	public void setConsumerDisputed(String consumerDisputed) {
+	public void setConsumerDisputed(boolean consumerDisputed) {
 		this.consumerDisputed = consumerDisputed;
 	}
 
