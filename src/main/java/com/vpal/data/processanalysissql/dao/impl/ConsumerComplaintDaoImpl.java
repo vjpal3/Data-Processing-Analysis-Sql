@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.vpal.data.processanalysissql.dao.ConsumerComplaintDao;
 import com.vpal.data.processanalysissql.model.ConsumerComplaint;
@@ -27,6 +28,7 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 	}
 
 	@Override
+	@Transactional
 	public void insert(List<? extends ConsumerComplaint> ConsumerComplaints) {
 		String sql = "INSERT INTO consumer_complaint " + "(date_received, product_name, sub_product, "
 				+ "issue, sub_issue, consumer_complaint_narrative, company_public_response, "
