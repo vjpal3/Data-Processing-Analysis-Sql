@@ -39,7 +39,7 @@ public class BatchConfig {
 	  @Bean
 	  public Step step1() {
 	    return stepBuilderFactory.get("step1").<ConsumerComplaint, ConsumerComplaint>chunk(2)
-	        .reader(Reader.reader("ConsumerComplaints-sample.csv"))
+	        .reader(Reader.reader("ConsumerComplaints.csv"))
 	        .processor(new Processor()).writer(new Writer(consumerComplaintDao)).build();
 	  }
 }
