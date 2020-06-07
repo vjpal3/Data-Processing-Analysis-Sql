@@ -9,10 +9,13 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.vpal.data.processanalysissql.dao.ConsumerComplaintDao;
 import com.vpal.data.processanalysissql.model.ConsumerComplaint;
 
@@ -21,7 +24,7 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 	
 	@Autowired
 	DataSource dataSource;
-	 
+	
 	@PostConstruct
 	private void initialize() {
 		setDataSource(dataSource);
@@ -65,5 +68,36 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 		          return ConsumerComplaints.size();
 		        }
 		      });
+	}
+
+	@Override
+	public ObjectNode statewiseComplaints(String state) {
+		
+		state = state.toUpperCase();
+		
+		String sql = "SELECT COUNT(*) FROM consumer_complaint where state_name = ?";
+		int totalCompalints = getJdbcTemplate().queryForObject(sql, new Object[] { state }, Integer.class);
+		
+		sql = "SELECT * FROM consumer_complaint where state_name = ?";
+		List<ConsumerComplaint> complaints = getJdbcTemplate().query(sql, new Object[] { state }, new BeanPropertyRowMapper<ConsumerComplaint>(ConsumerComplaint.class));
+				
+		final JsonNodeFactory factory = JsonNodeFactory.instance;
+		
+		//create parent node
+		final ObjectNode resultNode = factory.objectNode();
+		
+		String query = "Complaints Received in the state of " + state;
+		resultNode.put("query", query);
+		resultNode.put("Count", totalCompalints);
+		
+		// Create child node
+		final ObjectNode complaintNode = factory.objectNode();  
+		int index = 0;
+		for (ConsumerComplaint complaint : complaints)
+			complaintNode.putPOJO(Integer.toString(++index), complaint);
+		
+		resultNode.set("List of Complaints", complaintNode);
+						
+		return resultNode;
 	}
 }
