@@ -1,15 +1,15 @@
 package com.vpal.data.processanalysissql.model;
 
-import java.time.Instant;
+import java.util.Date;
 
 public class ConsumerComplaint {
 	
 	private long id;
-    private Instant dateReceived;
+    private Date dateReceived;
     private String productName ;
     private String subProduct ;
     private String issue;
-    private String subIssue ;
+    private String subIssue;
     private String consumerComplaintNarrative;
     private String companyPublicResponse;
     private String company;
@@ -18,20 +18,20 @@ public class ConsumerComplaint {
     private String tags;
     private String consumerConsentProvided;
     private String submittedVia ;
-    private Instant dateSent;
+    private Date dateSent;
     private String companyResponseToConsumer ;
-    private boolean timelyResponse;
-    private boolean consumerDisputed;
+    private String timelyResponse;
+    private String consumerDisputed;
     private int complaintId;
     
     public ConsumerComplaint() {
 	}
     
-	public ConsumerComplaint(long id, Instant dateReceived, String productName, String subProduct,
+	public ConsumerComplaint(long id, Date dateReceived, String productName, String subProduct,
 			String issue, String subIssue, String consumerComplaintNarrative, String companyPublicResponse,
 			String company, String stateName, String zipCode, String tags, String consumerConsentProvided,
-			String submittedVia, Instant dateSent, String companyResponseToConsumer, boolean timelyResponse,
-			boolean consumerDisputed, int complaintId) {
+			String submittedVia, Date dateSent, String companyResponseToConsumer, String timelyResponse,
+			String consumerDisputed, int complaintId) {
 		super();
 		this.id = id;
 		this.complaintId = complaintId;
@@ -70,11 +70,11 @@ public class ConsumerComplaint {
 		this.complaintId = complaintId;
 	}
 
-	public Instant getDateReceived() {
+	public Date getDateReceived() {
 		return dateReceived;
 	}
 
-	public void setDateReceived(Instant dateReceived) {
+	public void setDateReceived(Date dateReceived) {
 		this.dateReceived = dateReceived;
 	}
 
@@ -174,11 +174,11 @@ public class ConsumerComplaint {
 		this.submittedVia = submittedVia;
 	}
 
-	public Instant getDateSent() {
+	public Date getDateSent() {
 		return dateSent;
 	}
 
-	public void setDate_sent(Instant dateSent) {
+	public void setDatSent(Date dateSent) {
 		this.dateSent = dateSent;
 	}
 
@@ -190,19 +190,19 @@ public class ConsumerComplaint {
 		this.companyResponseToConsumer = companyResponseToConsumer;
 	}
 
-	public boolean getTimelyResponse() {
+	public String getTimelyResponse() {
 		return timelyResponse;
 	}
 
-	public void setTimelyResponse(boolean timelyResponse) {
+	public void setTimelyResponse(String timelyResponse) {
 		this.timelyResponse = timelyResponse;
 	}
 
-	public boolean getConsumerDisputed() {
+	public String getConsumerDisputed() {
 		return consumerDisputed;
 	}
 
-	public void setConsumerDisputed(boolean consumerDisputed) {
+	public void setConsumerDisputed(String consumerDisputed) {
 		this.consumerDisputed = consumerDisputed;
 	}
 
@@ -213,11 +213,9 @@ public class ConsumerComplaint {
 				+ subIssue + ", consumerComplaintNarrative=" + consumerComplaintNarrative + ", companyPublicResponse="
 				+ companyPublicResponse + ", company=" + company + ", stateName=" + stateName + ", zipCode=" + zipCode
 				+ ", tags=" + tags + ", consumerConsentProvided=" + consumerConsentProvided + ", submittedVia="
-				+ submittedVia + ", date_sent=" + dateSent + ", companyResponseToConsumer=" + companyResponseToConsumer
+				+ submittedVia + ", dateSent=" + dateSent + ", companyResponseToConsumer=" + companyResponseToConsumer
 				+ ", timelyResponse=" + timelyResponse + ", consumerDisputed=" + consumerDisputed + "]";
 	}
-    
-    
 }
 
 

@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS consumer_complaint (
     submitted_via VARCHAR,
     date_sent DATE,
     company_response_to_consumer VARCHAR,
-    timely_response BOOLEAN,
-    consumer_disputed BOOLEAN,
+    timely_response VARCHAR,
+    consumer_disputed VARCHAR,
     complaint_id INTEGER
 );

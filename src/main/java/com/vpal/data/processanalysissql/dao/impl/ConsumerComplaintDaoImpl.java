@@ -28,7 +28,7 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 
 	@Override
 	public void insert(List<? extends ConsumerComplaint> ConsumerComplaints) {
-		String sql = "INSERT INTO consumer_complaint " + "(date_received, produc_name, sub_product, "
+		String sql = "INSERT INTO consumer_complaint " + "(date_received, product_name, sub_product, "
 				+ "issue, sub_issue, consumer_complaint_narrative, company_public_response, "
 				+ "company, state_name, zip_code, tags, consumer_consent_provided, "
 				+ "submitted_via,  date_sent, company_response_to_consumer, timely_response, "
@@ -36,9 +36,10 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 		
 		getJdbcTemplate().batchUpdate(sql, new BatchPreparedStatementSetter() {
 		      public void setValues(PreparedStatement ps, int i) throws SQLException {
+		    	  
 		    	ConsumerComplaint complaint = ConsumerComplaints.get(i);
 		        
-		        ps.setObject(1, complaint.getDateReceived());
+		        ps.setDate(1, new java.sql.Date(complaint.getDateReceived().getTime()));
 		        ps.setString(2, complaint.getProductName());
 		        ps.setString(3, complaint.getSubProduct());
 		        ps.setString(4, complaint.getIssue());
@@ -51,10 +52,10 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 		        ps.setString(11, complaint.getTags());
 		        ps.setString(12, complaint.getConsumerConsentProvided());
 		        ps.setString(13, complaint.getSubmittedVia());
-		        ps.setObject(14, complaint.getDateSent());
+		        ps.setDate(14, new java.sql.Date(complaint.getDateSent().getTime()));
 		        ps.setString(15, complaint.getCompanyResponseToConsumer());
-		        ps.setBoolean(16, complaint.getTimelyResponse());
-		        ps.setBoolean(17, complaint.getConsumerDisputed());
+		        ps.setString(16, complaint.getTimelyResponse());
+		        ps.setString(17, complaint.getConsumerDisputed());
 		        ps.setInt(18, complaint.getComplaintId());
 		      }
 		      
@@ -63,5 +64,4 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 		        }
 		      });
 	}
-	
 }
