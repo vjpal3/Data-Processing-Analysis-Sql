@@ -33,13 +33,21 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 	@Override
 	@Transactional
 	public void insert(List<? extends ConsumerComplaint> ConsumerComplaints) {
-		String sql = "INSERT INTO consumer_complaint " + "(date_received, product_name, sub_product, "
-				+ "issue, sub_issue, consumer_complaint_narrative, company_public_response, "
-				+ "company, state_name, zip_code, tags, consumer_consent_provided, "
-				+ "submitted_via,  date_sent, company_response_to_consumer, timely_response, "
-				+ "consumer_disputed, complaint_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+//		String sql = "INSERT INTO consumer_complaint " + "(date_received, product_name, sub_product, "
+//				+ "issue, sub_issue, consumer_complaint_narrative, company_public_response, "
+//				+ "company, state_name, zip_code, tags, consumer_consent_provided, "
+//				+ "submitted_via,  date_sent, company_response_to_consumer, timely_response, "
+//				+ "consumer_disputed, complaint_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		
-		getJdbcTemplate().batchUpdate(sql, new BatchPreparedStatementSetter() {
+		StringBuilder sql = new StringBuilder();
+		sql.append("INSERT INTO consumer_complaint ");
+		sql.append("(date_received, product_name, sub_product, ");
+		sql.append("issue, sub_issue, consumer_complaint_narrative, company_public_response, ");
+		sql.append("company, state_name, zip_code, tags, consumer_consent_provided, ");
+		sql.append("submitted_via,  date_sent, company_response_to_consumer, timely_response, ");
+		sql.append("consumer_disputed, complaint_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		
+		getJdbcTemplate().batchUpdate(sql.toString(), new BatchPreparedStatementSetter() {
 		      public void setValues(PreparedStatement ps, int i) throws SQLException {
 		    	  
 		    	ConsumerComplaint complaint = ConsumerComplaints.get(i);
@@ -75,7 +83,7 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 		
 		state = state.toUpperCase();
 		
-		String sql = "SELECT COUNT(*) FROM consumer_complaint where state_name = ?";
+		String sql = "SELECT COUNT(id) FROM consumer_complaint where state_name = ?";
 		int totalCompalints = getJdbcTemplate().queryForObject(sql, new Object[] { state }, Integer.class);
 		
 		sql = "SELECT * FROM consumer_complaint where state_name = ?";

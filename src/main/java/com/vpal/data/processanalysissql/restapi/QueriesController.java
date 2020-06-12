@@ -1,5 +1,7 @@
 package com.vpal.data.processanalysissql.restapi;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +13,7 @@ import com.vpal.data.processanalysissql.dao.ConsumerComplaintDao;
 @RestController
 @RequestMapping("/query")
 public class QueriesController {
+	Logger logger = LoggerFactory.getLogger(QueriesController.class);
 	
 	private ConsumerComplaintDao consumerComplaintDao;
 	
@@ -20,7 +23,13 @@ public class QueriesController {
 	
 	@GetMapping("/complaints/{state}")
 	public ObjectNode statewiseComplaints(@PathVariable String state) {
+		long start = System.currentTimeMillis();
 		
-		return consumerComplaintDao.statewiseComplaints(state);
+		ObjectNode node = consumerComplaintDao.statewiseComplaints(state);
+		
+		long time = System.currentTimeMillis() - start;
+		
+		logger.info("Execution time -> {}", time);
+		return node;
 	}
 }
