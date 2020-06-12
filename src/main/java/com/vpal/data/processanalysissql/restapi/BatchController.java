@@ -18,6 +18,11 @@ public class BatchController {
 	 
 	  @Autowired
 	  Job job;
+	  
+	  @RequestMapping("/")
+	  public String home() {
+		  return "Welcome to AWS Data Processing App";
+	  }
 	 
 	  @RequestMapping("/loadcomplaints")
 	  public String handle() throws Exception {
@@ -29,6 +34,7 @@ public class BatchController {
 	    } catch (Exception e) {
 	      logger.info(e.getMessage());
 	    }
+	    
 	    return "Done! Check Console Window for more details";
 	  }
 }
