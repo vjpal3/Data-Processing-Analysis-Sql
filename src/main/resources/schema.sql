@@ -19,3 +19,5 @@ CREATE TABLE IF NOT EXISTS consumer_complaint (
     consumer_disputed VARCHAR,
     complaint_id INTEGER
 );
+
+CREATE INDEX idx_consumer_complaint_state_name ON consumer_complaint(state_name);
