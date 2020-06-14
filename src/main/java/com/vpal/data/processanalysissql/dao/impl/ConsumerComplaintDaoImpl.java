@@ -46,7 +46,7 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 		sql.append("company, state_name, zip_code, tags, consumer_consent_provided, ");
 		sql.append("submitted_via,  date_sent, company_response_to_consumer, timely_response, ");
 		sql.append("consumer_disputed, complaint_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-		
+
 		getJdbcTemplate().batchUpdate(sql.toString(), new BatchPreparedStatementSetter() {
 		      public void setValues(PreparedStatement ps, int i) throws SQLException {
 		    	  
@@ -105,7 +105,23 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 			complaintNode.putPOJO(Integer.toString(++index), complaint);
 		
 		resultNode.set("List of Complaints", complaintNode);
-						
+		return resultNode;
+	}
+
+	@Override
+	public ObjectNode processedSameDay() {
+		
+		String sql = "select count(id) from consumer_complaint where date_received = date_sent";
+		int totalCompalints = getJdbcTemplate().queryForObject(sql, Integer.class);
+		
+		final JsonNodeFactory factory = JsonNodeFactory.instance;
+		
+		//create parent node
+		final ObjectNode resultNode = factory.objectNode();
+		
+		String query = "Complaints received and sent on the same date";
+		resultNode.put("query", query);
+		resultNode.put("Count", totalCompalints);
 		return resultNode;
 	}
 }
