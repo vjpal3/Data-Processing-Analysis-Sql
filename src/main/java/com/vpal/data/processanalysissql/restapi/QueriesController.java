@@ -32,11 +32,18 @@ public class QueriesController {
 		logger.info("Execution time -> {}", time);
 		return node;
 	}
-	
+		
 	@GetMapping("/complaints/processedsameday")
 	public ObjectNode processedSameDay() {
 		
 		ObjectNode node = consumerComplaintDao.processedSameDay();
+		return node;
+	}
+	
+	@GetMapping("/complaints/productname/{product}")
+	public ObjectNode getProducts(@PathVariable String product) {
+		
+		ObjectNode node = consumerComplaintDao.getProducts(product);
 		return node;
 	}
 }

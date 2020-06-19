@@ -12,4 +12,6 @@ public interface ConsumerComplaintDao {
 	public  ObjectNode statewiseComplaints(String state);
 
 	public ObjectNode processedSameDay();
+
+	public ObjectNode getProducts(String product);
 }

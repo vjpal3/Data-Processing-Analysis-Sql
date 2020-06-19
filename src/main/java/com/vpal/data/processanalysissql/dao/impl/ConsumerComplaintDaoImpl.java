@@ -124,4 +124,22 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 		resultNode.put("Count", totalCompalints);
 		return resultNode;
 	}
+
+	@Override
+	public ObjectNode getProducts(String product) {
+		
+		String sql = "SELECT COUNT(id) FROM consumer_complaint WHERE product_name LIKE ?";		
+		int totalCompalints = getJdbcTemplate().queryForObject(sql, new Object[] { product + "%" }, Integer.class);
+		
+		final JsonNodeFactory factory = JsonNodeFactory.instance;
+		
+		//create parent node
+		final ObjectNode resultNode = factory.objectNode();
+		
+		String query = "Complaints with product name containg word " + product;
+		resultNode.put("query", query);
+		resultNode.put("Count", totalCompalints);
+		
+		return resultNode;
+	}
 }
