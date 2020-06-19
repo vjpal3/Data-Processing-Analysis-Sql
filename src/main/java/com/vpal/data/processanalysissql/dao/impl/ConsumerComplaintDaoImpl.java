@@ -1,6 +1,7 @@
 package com.vpal.data.processanalysissql.dao.impl;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,31 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 	@Autowired
 	DataSource dataSource;
 	
+	class ConsumerComplaintRowMapper implements RowMapper<ConsumerComplaint> {
+
+		@Override
+		public ConsumerComplaint mapRow(ResultSet rs, int rowNum) throws SQLException {
+			ConsumerComplaint complaint = new ConsumerComplaint();
+			complaint.setId(rs.getLong("id"));
+			complaint.setDateReceived(rs.getDate("date_received"));
+	        complaint.setProductName(rs.getString("product_name"));
+	        complaint.setIssue(rs.getString("issue"));
+	        complaint.setConsumerComplaintNarrative(rs.getString("consumer_complaint_narrative"));
+	        complaint.setCompanyPublicResponse(rs.getString("company_public_response"));
+	        complaint.setCompany(rs.getString("company"));
+	        complaint.setStateName(rs.getString("state_name"));
+	        complaint.setZipCode(rs.getString("zip_code"));
+	        complaint.setSubmittedVia(rs.getString("submitted_via"));
+	        complaint.setDateSent(rs.getDate("date_sent"));
+	        complaint.setCompanyResponseToConsumer(rs.getString("company_response_to_consumer"));
+	        complaint.setTimelyResponse(rs.getString("timely_response"));
+	        complaint.setConsumerDisputed(rs.getString("consumer_disputed"));
+	        complaint.setComplaintId(rs.getInt("complaint_id"));
+	        
+			return complaint;
+		}
+	}
+		
 	@PostConstruct
 	private void initialize() {
 		setDataSource(dataSource);
@@ -128,18 +155,34 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 	@Override
 	public ObjectNode getProducts(String product) {
 		
-		String sql = "SELECT COUNT(id) FROM consumer_complaint WHERE product_name LIKE ?";		
-		int totalCompalints = getJdbcTemplate().queryForObject(sql, new Object[] { product + "%" }, Integer.class);
+		String searchPhrase = "%" + product + "%";
+		String sql = String.join(
+				System.getProperty("line.separator"), 
+				"SELECT id, date_received, product_name, issue, consumer_complaint_narrative, company_public_response, ",
+				"company, state_name, zip_code, submitted_via, date_sent, company_response_to_consumer, ", 
+				"timely_response, consumer_disputed, complaint_id ",
+				" FROM consumer_complaint WHERE product_name ILIKE ?"
+		);
+
+		List<ConsumerComplaint> complaints = getJdbcTemplate().query(sql, new Object[] { searchPhrase }, new ConsumerComplaintRowMapper());
 		
 		final JsonNodeFactory factory = JsonNodeFactory.instance;
-		
 		//create parent node
 		final ObjectNode resultNode = factory.objectNode();
 		
-		String query = "Complaints with product name containg word " + product;
+		String query = "Complaints with word '" + product + "' in product field";
 		resultNode.put("query", query);
-		resultNode.put("Count", totalCompalints);
+		resultNode.put("Count", complaints.size());
+		
+		// Create child node
+		final ObjectNode complaintNode = factory.objectNode();  
+		int index = 0;
+		for (ConsumerComplaint complaint : complaints)
+			complaintNode.putPOJO(Integer.toString(++index), complaint);
+		
+		resultNode.set("List of Complaints", complaintNode);
 		
 		return resultNode;
 	}
 }
+

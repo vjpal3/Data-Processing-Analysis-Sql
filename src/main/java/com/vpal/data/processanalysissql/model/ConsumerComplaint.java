@@ -65,7 +65,7 @@ public class ConsumerComplaint {
 	public int getComplaintId() {
 		return complaintId;
 	}
-
+	
 	public void setComplaintId(int complaintId) {
 		this.complaintId = complaintId;
 	}
@@ -178,7 +178,7 @@ public class ConsumerComplaint {
 		return dateSent;
 	}
 
-	public void setDatSent(Date dateSent) {
+	public void setDateSent(Date dateSent) {
 		this.dateSent = dateSent;
 	}
 
