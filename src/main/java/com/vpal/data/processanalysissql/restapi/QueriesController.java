@@ -32,6 +32,13 @@ public class QueriesController {
 		logger.info("Execution time -> {}", time);
 		return node;
 	}
+	
+	@GetMapping("/complaints/issues/{issue}")
+	public ObjectNode getIssue(@PathVariable String issue) {
+		
+		ObjectNode node = consumerComplaintDao.getIssue(issue);
+		return node;
+	}
 		
 	@GetMapping("/complaints/processedsameday")
 	public ObjectNode processedSameDay() {

@@ -27,6 +27,11 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 	@Autowired
 	DataSource dataSource;
 	
+	@PostConstruct
+	private void initialize() {
+		setDataSource(dataSource);
+	}
+	
 	class ConsumerComplaintRowMapper implements RowMapper<ConsumerComplaint> {
 
 		@Override
@@ -52,11 +57,6 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 		}
 	}
 		
-	@PostConstruct
-	private void initialize() {
-		setDataSource(dataSource);
-	}
-
 	@Override
 	@Transactional
 	public void insert(List<? extends ConsumerComplaint> ConsumerComplaints) {
@@ -132,6 +132,38 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 			complaintNode.putPOJO(Integer.toString(++index), complaint);
 		
 		resultNode.set("List of Complaints", complaintNode);
+		return resultNode;
+	}
+	
+	@Override
+	public ObjectNode getIssue(String issue) {
+		String searchPhrase = "%" + issue + "%";
+		String sql = String.join(
+				System.getProperty("line.separator"), 
+				"SELECT id, date_received, product_name, issue, consumer_complaint_narrative, company_public_response, ",
+				"company, state_name, zip_code, submitted_via, date_sent, company_response_to_consumer, ", 
+				"timely_response, consumer_disputed, complaint_id ",
+				" FROM consumer_complaint WHERE issue ILIKE ?"
+		);
+
+		List<ConsumerComplaint> complaints = getJdbcTemplate().query(sql, new Object[] { searchPhrase }, new ConsumerComplaintRowMapper());
+		
+		final JsonNodeFactory factory = JsonNodeFactory.instance;
+		//create parent node
+		final ObjectNode resultNode = factory.objectNode();
+		
+		String query = "Complaints with word '" + issue + "' in issue field";
+		resultNode.put("query", query);
+		resultNode.put("Count", complaints.size());
+		
+		// Create child node
+		final ObjectNode complaintNode = factory.objectNode();  
+		int index = 0;
+		for (ConsumerComplaint complaint : complaints)
+			complaintNode.putPOJO(Integer.toString(++index), complaint);
+		
+		resultNode.set("List of Complaints", complaintNode);
+		
 		return resultNode;
 	}
 
