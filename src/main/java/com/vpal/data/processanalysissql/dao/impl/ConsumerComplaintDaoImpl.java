@@ -107,13 +107,9 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 
 	@Override
 	public ObjectNode statewiseComplaints(String state) {
-		
 		state = state.toUpperCase();
 		
-		String sql = "SELECT COUNT(id) FROM consumer_complaint where state_name = ?";
-		int totalCompalints = getJdbcTemplate().queryForObject(sql, new Object[] { state }, Integer.class);
-		
-		sql = "SELECT * FROM consumer_complaint where state_name = ?";
+		String sql = "SELECT * FROM consumer_complaint where state_name = ?";
 		List<ConsumerComplaint> complaints = getJdbcTemplate().query(sql, new Object[] { state }, new BeanPropertyRowMapper<ConsumerComplaint>(ConsumerComplaint.class));
 				
 		final JsonNodeFactory factory = JsonNodeFactory.instance;
@@ -123,7 +119,7 @@ public class ConsumerComplaintDaoImpl extends JdbcDaoSupport implements Consumer
 		
 		String query = "Complaints Received in the state of " + state;
 		resultNode.put("query", query);
-		resultNode.put("Count", totalCompalints);
+		resultNode.put("Count", complaints.size());
 		
 		// Create child node
 		final ObjectNode complaintNode = factory.objectNode();  
